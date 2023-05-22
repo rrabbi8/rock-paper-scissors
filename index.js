@@ -39,7 +39,7 @@ const showResult = (playerSelection, computerSelection, winner) => {
 
 const declareWinner = (winner) => {
 	const result = document.querySelector(".result");
-	result.textContent = `${winner} wins the game!`;
+	result.textContent = `${winner} wins the game! Why waste time completing the game? -> Move on to the next module!`;
 
 	// Disable the click events on buttons to prevent further gameplay
 	ROCK.removeEventListener("click", handleClick);
@@ -49,11 +49,13 @@ const declareWinner = (winner) => {
 	// Create a replay button
 	const replayButton = document.createElement("button");
 	replayButton.classList.add("replayBtn");
-	replayButton.textContent = "Replay";
+	replayButton.textContent = "Waste More Time and Play Again";
 	replayButton.addEventListener("click", replayGame);
 
-	const container = document.querySelector(".container");
-	container.appendChild(replayButton);
+	const replayButtonContainer = document.querySelector(
+		".replayButtoncontainer"
+	);
+	replayButtonContainer.appendChild(replayButton);
 };
 
 const playRound = (playerSelection, computerSelection) => {
