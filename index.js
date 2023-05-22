@@ -5,59 +5,100 @@ const ROCK = document.querySelector("#ROCK");
 const PAPER = document.querySelector("#PAPER");
 const SCISSORS = document.querySelector("#SCISSORS");
 
+let playerScore = 0;
+let computerScore = 0;
+
 const getComputerChoice = () => {
 	const lst = [ROCK, PAPER, SCISSORS];
 	const random = lst[Math.floor(Math.random() * lst.length)];
 	return random;
 };
 
-const showResult = (winner, loser) => {
-	const container = document.querySelector(".container");
-	const content = document.createElement("div");
-	content.textContent = `${winner} beats ${loser}!`;
-	container.appendChild(content);
+const showResult = (playerSelection, computerSelection, winner) => {
+	const result = document.querySelector(".result");
+
+	if (winner === "Draw") {
+		result.textContent = "Draw!";
+	} else if (winner === playerSelection) {
+		result.textContent = `You win! You choose ${playerSelection}. Computer chooses ${computerSelection}`;
+	} else {
+		result.textContent = `You lose! You choose ${playerSelection}. Computer chooses ${computerSelection}`;
+	}
+
+	const scoreCard = document.querySelector(".scoreCard");
+
+	scoreCard.textContent = `Player Score: ${playerScore} Computer Score: ${computerScore}`;
+
+	// Check if either player or computer has reached a score of 5
+	if (playerScore === 5) {
+		declareWinner("Player");
+	} else if (computerScore === 5) {
+		declareWinner("Computer");
+	}
 };
 
-const draw = () => {
+const declareWinner = (winner) => {
+	const result = document.querySelector(".result");
+	result.textContent = `${winner} wins the game!`;
+
+	// Disable the click events on buttons to prevent further gameplay
+	ROCK.removeEventListener("click", handleClick);
+	PAPER.removeEventListener("click", handleClick);
+	SCISSORS.removeEventListener("click", handleClick);
+
+	// Create a replay button
+	const replayButton = document.createElement("button");
+	replayButton.classList.add("replayBtn");
+	replayButton.textContent = "Replay";
+	replayButton.addEventListener("click", replayGame);
+
 	const container = document.querySelector(".container");
-	const content = document.createElement("div");
-	content.textContent = `Draw!`;
-	container.appendChild(content);
+	container.appendChild(replayButton);
 };
 
-const playRound = (playerSelection) => {
-	const computerSelection = getComputerChoice();
-
-	console.log(`You choose ${playerSelection}`);
-	console.log(`Computer chooses ${computerSelection.id}`);
-
+const playRound = (playerSelection, computerSelection) => {
 	if (playerSelection === computerSelection.id) {
-		console.log("Draw!");
-		draw();
-		return 0;
+		showResult(playerSelection, computerSelection.id, "Draw");
 	} else if (
 		(playerSelection === "ROCK" && computerSelection.id === "SCISSORS") ||
 		(playerSelection === "SCISSORS" && computerSelection.id === "PAPER") ||
 		(playerSelection === "PAPER" && computerSelection.id === "ROCK")
 	) {
-		console.log(
-			`You win! ${playerSelection} beats ${computerSelection.id}!`
-		);
-		showResult(playerSelection, computerSelection.id);
-		return PLAYERWIN;
+		playerScore++;
+		showResult(playerSelection, computerSelection.id, playerSelection);
 	} else {
-		console.log(
-			`You lose! ${computerSelection.id} beats ${playerSelection}!`
-		);
-		showResult(computerSelection.id, playerSelection);
-		return COMPWIN;
+		computerScore++;
+		showResult(playerSelection, computerSelection.id, computerSelection.id);
 	}
 };
 
-function handleClick(playerSelection) {
-	playRound(playerSelection);
+function handleClick(event) {
+	const playerSelection = event.target.id;
+	const computerSelection = getComputerChoice();
+	playRound(playerSelection, computerSelection);
 }
 
-ROCK.addEventListener("click", () => handleClick(ROCK.id));
-PAPER.addEventListener("click", () => handleClick(PAPER.id));
-SCISSORS.addEventListener("click", () => handleClick(SCISSORS.id));
+function replayGame() {
+	// Reset scores and result text
+	playerScore = 0;
+	computerScore = 0;
+	const result = document.querySelector(".result");
+	result.textContent = "";
+
+	// Remove replay button
+	const replayButton = document.querySelector(".replayBtn");
+	replayButton.remove();
+
+	// Add event listeners back to the buttons
+	ROCK.addEventListener("click", handleClick);
+	PAPER.addEventListener("click", handleClick);
+	SCISSORS.addEventListener("click", handleClick);
+
+	// Clear the score card
+	const scoreCard = document.querySelector(".scoreCard");
+	scoreCard.textContent = "";
+}
+
+ROCK.addEventListener("click", handleClick);
+PAPER.addEventListener("click", handleClick);
+SCISSORS.addEventListener("click", handleClick);
