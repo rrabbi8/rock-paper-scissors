@@ -1,8 +1,12 @@
-const ROCK = "Rock";
-const PAPER = "Paper";
-const SCISSORS = "Scissors";
+// const ROCK = "Rock";
+// const PAPER = "Paper";
+// const SCISSORS = "Scissors";
 const COMPWIN = 2;
 const PLAYERWIN = 1;
+
+const ROCK = document.querySelector("#ROCK");
+const PAPER = document.querySelector("#PAPER");
+const SCISSORS = document.querySelector("#SCISSORS");
 
 const getComputerChoice = () => {
 	const lst = [ROCK, PAPER, SCISSORS];
@@ -10,45 +14,36 @@ const getComputerChoice = () => {
 	return random;
 };
 
-const playRound = () => {
-	const playerSelection = prompt("Enter Rock, Paper, or Scissors: ");
+const playRound = (playerSelection) => {
 	const computerSelection = getComputerChoice();
-	console.log(`You choose ${playerSelection}`);
-	console.log(`Computer chooses ${computerSelection}`);
 
-	if (playerSelection === computerSelection) {
+	console.log(`You choose ${playerSelection}`);
+	console.log(`Computer chooses ${computerSelection.id}`);
+
+	if (playerSelection === computerSelection.id) {
 		console.log("Draw!");
 		return 0;
 	} else if (
-		(playerSelection === ROCK && computerSelection === SCISSORS) ||
-		(playerSelection === SCISSORS && computerSelection === PAPER) ||
-		(playerSelection === PAPER && computerSelection === ROCK)
+		(playerSelection === "ROCK" && computerSelection.id === "SCISSORS") ||
+		(playerSelection === "SCISSORS" && computerSelection.id === "PAPER") ||
+		(playerSelection === "PAPER" && computerSelection.id === "ROCK")
 	) {
-		console.log(`You win! ${playerSelection} beats ${computerSelection}!`);
+		console.log(
+			`You win! ${playerSelection} beats ${computerSelection.id}!`
+		);
 		return PLAYERWIN;
 	} else {
-		console.log(`You lose! ${computerSelection} beats ${playerSelection}!`);
+		console.log(
+			`You lose! ${computerSelection.id} beats ${playerSelection}!`
+		);
 		return COMPWIN;
 	}
 };
 
-const game = () => {
-	let compScore = 0;
-	let playerScore = 0;
-	for (let i = 0; i < 5; i++) {
-		let winner = playRound();
-		if (winner === COMPWIN) {
-			compScore++;
-		} else if (winner === PLAYERWIN) {
-			playerScore++;
-		}
-		console.log(`Score: Computer ${compScore}, You ${playerScore}`);
-	}
-	if (compScore > playerScore) {
-		return `You lose! Final score: Computer ${compScore}, You ${playerScore}`;
-	} else {
-		return `You win! Final score: Computer ${compScore}, You ${playerScore}`;
-	}
-};
+function handleClick(playerSelection) {
+	playRound(playerSelection);
+}
 
-console.log(game());
+ROCK.addEventListener("click", () => handleClick(ROCK.id));
+PAPER.addEventListener("click", () => handleClick(PAPER.id));
+SCISSORS.addEventListener("click", () => handleClick(SCISSORS.id));
