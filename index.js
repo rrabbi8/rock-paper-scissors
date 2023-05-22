@@ -7,6 +7,7 @@ const SCISSORS = document.querySelector("#SCISSORS");
 
 let playerScore = 0;
 let computerScore = 0;
+let draw = 0;
 
 const getComputerChoice = () => {
 	const lst = [ROCK, PAPER, SCISSORS];
@@ -18,10 +19,17 @@ const showResult = (playerSelection, computerSelection, winner) => {
 	const result = document.querySelector(".result");
 
 	if (winner === "Draw") {
-		result.textContent = "Draw!";
+		draw++;
+		if (draw > 1) {
+			result.textContent = `Draw ${draw}!`;
+		} else {
+			result.textContent = "Draw!";
+		}
 	} else if (winner === playerSelection) {
+		draw = 0;
 		result.textContent = `You win! You choose ${playerSelection}. Computer chooses ${computerSelection}`;
 	} else {
+		draw = 0;
 		result.textContent = `You lose! You choose ${playerSelection}. Computer chooses ${computerSelection}`;
 	}
 
