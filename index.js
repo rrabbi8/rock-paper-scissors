@@ -1,6 +1,3 @@
-// const ROCK = "Rock";
-// const PAPER = "Paper";
-// const SCISSORS = "Scissors";
 const COMPWIN = 2;
 const PLAYERWIN = 1;
 
@@ -14,6 +11,20 @@ const getComputerChoice = () => {
 	return random;
 };
 
+const showResult = (winner, loser) => {
+	const container = document.querySelector(".container");
+	const content = document.createElement("div");
+	content.textContent = `${winner} beats ${loser}!`;
+	container.appendChild(content);
+};
+
+const draw = () => {
+	const container = document.querySelector(".container");
+	const content = document.createElement("div");
+	content.textContent = `Draw!`;
+	container.appendChild(content);
+};
+
 const playRound = (playerSelection) => {
 	const computerSelection = getComputerChoice();
 
@@ -22,6 +33,7 @@ const playRound = (playerSelection) => {
 
 	if (playerSelection === computerSelection.id) {
 		console.log("Draw!");
+		draw();
 		return 0;
 	} else if (
 		(playerSelection === "ROCK" && computerSelection.id === "SCISSORS") ||
@@ -31,11 +43,13 @@ const playRound = (playerSelection) => {
 		console.log(
 			`You win! ${playerSelection} beats ${computerSelection.id}!`
 		);
+		showResult(playerSelection, computerSelection.id);
 		return PLAYERWIN;
 	} else {
 		console.log(
 			`You lose! ${computerSelection.id} beats ${playerSelection}!`
 		);
+		showResult(computerSelection.id, playerSelection);
 		return COMPWIN;
 	}
 };
